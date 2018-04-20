@@ -2,6 +2,7 @@
 name = "fm_tree"
 version = "0.1.0"
 authors = ["Mykola Basov <kolybasov@gmail.com>"]
+licence = "MIT"
 
 [dependencies]
 serde = "1.0.27"
