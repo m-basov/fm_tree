@@ -1,0 +1,11 @@
+[package]
+name = "fm_tree"
+version = "0.1.0"
+authors = ["Mykola Basov <kolybasov@gmail.com>"]
+
+[dependencies]
+serde = "1.0.27"
+serde_json = "1.0.9"
+serde_derive = "1.0.27"
+serde_yaml = "0.7"
+clap = "2.31.2"

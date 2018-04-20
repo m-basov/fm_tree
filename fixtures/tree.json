@@ -1,0 +1,20 @@
+{
+  "src": {
+    "fs_tree.rs": true,
+    "main.rs": true
+  },
+  "target": {
+    "debug": {
+      "native": true,
+      "fm_tree": true,
+      ".cargo-lock": true,
+      "fm_tree.d": true
+    },
+    "rls": {
+      "debug": true
+    }
+  },
+  ".gitignore": true,
+  "Cargo.lock": true,
+  "Cargo.toml": true
+}

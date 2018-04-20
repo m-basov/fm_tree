@@ -1,0 +1,14 @@
+- src:
+    - fs_tree.rs
+    - main.rs
+- target:
+    - debug:
+        - native
+        - fm_tree
+        - .cargo-lock
+        - fm_tree.d
+    - rls:
+        - debug
+- .gitignore
+- Cargo.lock
+- Cargo.toml
