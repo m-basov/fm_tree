@@ -1,4 +1,4 @@
-- src:
+- YAML_src:
     - fs_tree.rs
     - main.rs
 - target:

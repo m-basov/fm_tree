@@ -8,11 +8,13 @@ const CHAR_EMPTY_PIPE: &str = "    ";
 
 use std::fmt;
 use std::fmt::Write;
+use yaml;
+use json;
 
 #[derive(Debug)]
 pub struct FSNode {
-    name: String,
-    children: Vec<FSNode>,
+    pub name: String,
+    pub children: Vec<FSNode>,
 }
 impl fmt::Display for FSNode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -62,38 +64,16 @@ impl FSNode {
     }
 
     pub fn from_yaml(yaml: &str) -> FSNode {
-        let raw: Vec<serde_yaml::Value> = serde_yaml::from_str(yaml).expect("YAML is invalid");
         FSNode {
             name: ".".to_owned(),
-            children: collect_from_yaml(&raw),
-        }
-    }
-}
-
-fn collect_from_yaml(yaml: &[serde_yaml::Value]) -> Vec<FSNode> {
-    let mut nodes = vec![];
-
-    for val in yaml {
-        if val.is_string() {
-            let file_name = val.as_str().unwrap().to_owned();
-            nodes.push(FSNode::new(file_name));
-        } else if val.is_mapping() {
-            for (key, item) in val.as_mapping().unwrap() {
-                let key = key.as_str().unwrap().to_owned();
-                let node = if item.is_string() {
-                    FSNode::new(key)
-                } else {
-                    let item = item.as_sequence()
-                        .expect("Values may be only strings or sequences");
-                    FSNode {
-                        name: key,
-                        children: collect_from_yaml(item),
-                    }
-                };
-                nodes.push(node);
-            }
+            children: yaml::parse(yaml),
         }
     }
 
-    nodes
+    pub fn from_json(json: &str) -> FSNode {
+        FSNode {
+            name: ".".to_owned(),
+            children: json::parse(json),
+        }
+    }
 }

@@ -1,5 +1,5 @@
 {
-  "src": {
+  "JSON_src": {
     "fs_tree.rs": true,
     "main.rs": true
   },

@@ -1,12 +1,40 @@
 mod fs_tree;
+mod json;
+mod yaml;
 
 extern crate clap;
 
+use clap::{App, Arg};
+use fs_tree::FSNode;
 use std::fs;
 use std::io;
 use std::io::Read;
-use clap::{App,Arg};
-use fs_tree::FSNode;
+use std::path::Path;
+
+#[derive(Debug)]
+enum ContentFormat {
+    JSON,
+    YAML
+}
+
+fn str_format_to_enum(format: Option<&str>) -> Option<ContentFormat> {
+    if let Some(format) = format {
+        return match format.to_lowercase().as_str() {
+            "json" => Some(ContentFormat::JSON),
+            "yaml" | "yml" => Some(ContentFormat::YAML),
+            _ => None,
+        }
+     }
+     None
+}
+
+fn format_from_file_name(path: &str) -> Option<ContentFormat> {
+    let path = Path::new(path);
+    match path.extension() {
+        Some(ext) => str_format_to_enum(ext.to_str()),
+        None => None,
+    }
+}
 
 fn main() {
     let matches = App::new("fm_tree")
@@ -25,12 +53,44 @@ fn main() {
              .index(1))
         .get_matches();
 
-    if let Some(file) = matches.value_of("INPUT") {
-        let content = fs::read_to_string(file).expect("Cannot read file.");
-        println!("{}", FSNode::from_yaml(&content));
-    } else {
-        let mut content = String::new();
-        io::stdin().read_to_string(&mut content).unwrap();
-        println!("{}", FSNode::from_yaml(&content));
-    }
+    let mut file_name: Option<&str> = None;
+    let content = match matches.value_of("INPUT") {
+        Some(file) => {
+            file_name = Some(&file);
+            fs::read_to_string(file).expect("Cannot read file.")
+        },
+        None => {
+            let mut buf = String::new();
+            io::stdin().read_to_string(&mut buf).unwrap();
+            buf
+        },
+    };
+
+    let format = match matches.value_of("format") {
+        None => {
+            if let Some(file_name) = file_name {
+                match format_from_file_name(file_name) {
+                    Some(format) => format,
+                    None => {
+                        panic!("Cannot derive format from file name.");
+                    }
+                }
+            } else {
+                panic!("You need to pass '--format' option.");
+            }
+        },
+        format => {
+            if let Some(format) = str_format_to_enum(format) {
+                format
+            } else {
+                panic!("Specified format is not supported.");
+            }
+        },
+    };
+
+    let tree = match format {
+        ContentFormat::JSON => FSNode::from_json(&content),
+        ContentFormat::YAML => FSNode::from_yaml(&content),
+    };
+    println!("{}", tree);
 }
