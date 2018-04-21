@@ -15,6 +15,9 @@ It is just experiment so if you find this useful any help is welcome!
 
 `cargo install fm_tree`
 
+or download binary from [releases](https://github.com/kolybasov/fm_tree/releases)
+page(macOS only for now).
+
 ## Example
 
 Example YAML input:
