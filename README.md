@@ -4,6 +4,19 @@ fm_tree
 CLI util to format YAML/JSON file to File System tree representation.
 Because indentation is hard! :)
 
+It is just experiment so if you find this useful any help is welcome!
+
+## Requirements
+
+- [Rust](https://www.rust-lang.org/en-US/)
+- [Cargo](https://crates.io/)
+
+## Installation
+
+`cargo install fm_tree`
+
+## Example
+
 Example YAML input:
 
 ```yaml
@@ -42,3 +55,7 @@ Example output:
 ├── Cargo.lock
 └── Cargo.toml
 ```
+
+## License
+
+[MIT](./LICENSE.md)
